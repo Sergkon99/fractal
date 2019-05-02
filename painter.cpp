@@ -17,7 +17,6 @@ Painter::Painter(QLabel* l){
 
     init(0, 1);
 
-    //QPointF f(3.4, 5.6);
     A = QPointF(2, 3);
     B = QPointF(-6, 8);
     C = QPointF(-1, -4);
@@ -238,7 +237,6 @@ bool Painter::inArea(QPoint a, QPoint b, QPoint c)
 
 QColor Painter::randomColor()
 {
-    //QRandomGenerator gen;
     std::srand(QTime::currentTime().msec());
     std::rand() % 256;
 
@@ -255,7 +253,6 @@ double Painter::dist(QPoint p1, QPoint p2)
 }
 
 void Painter::draw(){
-    // рисуем график
     QPainterPath path;
     bool st = true;
     for (double i = -10; i <= 10; i += 0.01) {
@@ -272,7 +269,6 @@ void Painter::draw(){
     }
     QPolygon p(v);
     painter->drawPolygon(p);
-    //painter->drawPath(path);
 }
 
 void Painter::draw(const QPolygon &p)
@@ -292,27 +288,23 @@ void Painter::drawFractal(QPointF _v1, QPointF _v2, QPointF _v3, int n)
         polygon.append(v2);
         polygon.append(v3);
         if(fill)
-            painter->setBrush(Qt::black); // заливка треугольников
+            painter->setBrush(Qt::black); 
         else
             painter->setBrush(Qt::NoBrush);
 
         draw(polygon);
-        //
-        //qDebug() << randomColor();
+
         return;
     }
 
-    //qDebug() << dist(v1, v2) << " " << dist(v2, v3) << " " << dist(v3, v1);
     QPointF s12((_v1.x() + _v2.x()) / 2, (_v1.y() + _v2.y()) / 2);
     QPointF s23((_v2.x() + _v3.x()) / 2, (_v2.y() + _v3.y()) / 2);
     QPointF s31((_v3.x() + _v1.x()) / 2, (_v3.y() + _v1.y()) / 2);
 
-    //if(inArea(v1, s12, s31))
-        drawFractal(_v1, s12, s31, n - 1);
-    //if(inArea(s12, v2, s23))
-        drawFractal(s12, _v2, s23, n - 1);
-    //if(inArea(s23, v3, s31))
-        drawFractal(s23, _v3, s31, n - 1);
+
+    drawFractal(_v1, s12, s31, n - 1);
+    drawFractal(s12, _v2, s23, n - 1);
+    drawFractal(s23, _v3, s31, n - 1);
 }
 
 void Painter::drawPoint(QPointF p)
