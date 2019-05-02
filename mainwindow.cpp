@@ -43,8 +43,7 @@ void MainWindow::mousePressEvent(QMouseEvent * e)
     auto cursorPos = e->pos();
     auto graphGeometry = ui->lbGraph->geometry();
 
-    if(checkArea(cursorPos, graphGeometry)){
-        //cursorPos = QPoint(cursorPos.x() - graphGeometry.x(), cursorPos.y() - graphGeometry.y()); // преобразование координат курсора относительно pixmap
+    if(checkArea(cursorPos, graphGeometry)){       
         emit signalMousePress(cursorPos);
         if(ui->cb_choosePoint->isChecked()){
             emit signalAddPoins(cursorPos);
@@ -52,8 +51,6 @@ void MainWindow::mousePressEvent(QMouseEvent * e)
     }else{
         ui->statusBar->showMessage("Out graph",500);
     }
-
-    //ui->statusBar->showMessage(QString("%1, %2").arg(cursorPos.x()).arg(cursorPos.y()));
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent * e)
@@ -166,7 +163,6 @@ void MainWindow::slotAddPoints(QPoint p)
         ui->label_2->setEnabled(false);
     }
 
-    //paint->update();
     ui->statusBar->showMessage(QString("%1, %2 : %3, %4").arg(p.x()).arg(p.y()).arg(_p.x()).arg(_p.y()));
 }
 
@@ -176,12 +172,10 @@ void MainWindow::on_cb_nAuto_stateChanged(int arg1)
     if(arg1 == 0){
         ui->label->setEnabled(true);
         ui->sb_n->setEnabled(true);
-        //ui->pb_update->setEnabled(true);
         paint->setAutoChooseN(false, ui->sb_n->value());
     }else {
         ui->label->setEnabled(false);
         ui->sb_n->setEnabled(false);
-        //ui->pb_update->setEnabled(false);
         paint->setAutoChooseN(true);
     }
 }
