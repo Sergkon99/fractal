@@ -25,8 +25,8 @@ class Painter
     QVector<QPointF> points;
     int n;
 
-    int pixmapHeight;// высота
-    int pixmapWidht;// ширина
+    int pixmapHeight;
+    int pixmapWidht;
     bool autoChooseN;
     bool choosePoint;
     bool showGrid;
