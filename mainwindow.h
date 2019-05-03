@@ -7,7 +7,6 @@
 #include <QPair>
 
 #include "painter.h"
-#include "triangle.h"
 
 namespace Ui {
 class MainWindow;
