@@ -47,7 +47,7 @@ private:
 protected:
     void mousePressEvent(QMouseEvent*);
     void mouseReleaseEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);// TODO придумать нормальное смещение для графика
+    void mouseMoveEvent(QMouseEvent*);
     void wheelEvent(QWheelEvent*);
 
 private slots:
