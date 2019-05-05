@@ -31,6 +31,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, &MainWindow::signalMouseRelease, this, &MainWindow::slotMouseRelease);
     connect(this, &MainWindow::signalWhell, this, &MainWindow::slotWhell);
     connect(this, &MainWindow::signalAddPoins, this, &MainWindow::slotAddPoints);
+    connect(this, &MainWindow::signalColor, this, &MainWindow::slotColor);
+
+    QPixmap pix(ui->lbl_sampleColor->width(), ui->lbl_sampleColor->height());
+    QPainter p(&pix);
+    p.setBrush(QBrush(Qt::black));
+    p.eraseRect(0, 0, ui->lbl_sampleColor->width(), ui->lbl_sampleColor->height());
+    p.drawRect(0, 0, ui->lbl_sampleColor->width(), ui->lbl_sampleColor->height());
+    ui->lbl_sampleColor->setPixmap(pix);
+    ui->lbl_sampleColor->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -43,7 +52,8 @@ void MainWindow::mousePressEvent(QMouseEvent * e)
     auto cursorPos = e->pos();
     auto graphGeometry = ui->lbGraph->geometry();
 
-    if(checkArea(cursorPos, graphGeometry)){       
+    if(checkArea(cursorPos, graphGeometry)){
+        //cursorPos = QPoint(cursorPos.x() - graphGeometry.x(), cursorPos.y() - graphGeometry.y()); // преобразование координат курсора относительно pixmap
         emit signalMousePress(cursorPos);
         if(ui->cb_choosePoint->isChecked()){
             emit signalAddPoins(cursorPos);
@@ -51,6 +61,13 @@ void MainWindow::mousePressEvent(QMouseEvent * e)
     }else{
         ui->statusBar->showMessage("Out graph",500);
     }
+
+    auto sampleColorGeonetry = ui->lbl_sampleColor->geometry();
+    if(checkArea(cursorPos, sampleColorGeonetry)){
+        emit signalColor();
+    }
+
+    //ui->statusBar->showMessage(QString("%1, %2").arg(cursorPos.x()).arg(cursorPos.y()));
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent * e)
@@ -163,7 +180,23 @@ void MainWindow::slotAddPoints(QPoint p)
         ui->label_2->setEnabled(false);
     }
 
+    //paint->update();
     ui->statusBar->showMessage(QString("%1, %2 : %3, %4").arg(p.x()).arg(p.y()).arg(_p.x()).arg(_p.y()));
+}
+
+void MainWindow::slotColor()
+{
+    QColor color = QColorDialog::getColor(Qt::black);
+    if(color.isValid()){
+        QPixmap pix(ui->lbl_sampleColor->width(), ui->lbl_sampleColor->height());
+        QPainter p(&pix);
+        p.setBrush(QBrush(color));
+        p.eraseRect(0, 0, ui->lbl_sampleColor->width(), ui->lbl_sampleColor->height());
+        p.drawRect(0, 0, ui->lbl_sampleColor->width(), ui->lbl_sampleColor->height());
+        ui->lbl_sampleColor->setPixmap(pix);
+        paint->setColor(color);
+        paint->update();
+    }
 }
 
 
@@ -172,10 +205,12 @@ void MainWindow::on_cb_nAuto_stateChanged(int arg1)
     if(arg1 == 0){
         ui->label->setEnabled(true);
         ui->sb_n->setEnabled(true);
+        //ui->pb_update->setEnabled(true);
         paint->setAutoChooseN(false, ui->sb_n->value());
     }else {
         ui->label->setEnabled(false);
         ui->sb_n->setEnabled(false);
+        //ui->pb_update->setEnabled(false);
         paint->setAutoChooseN(true);
     }
 }
@@ -200,6 +235,9 @@ void MainWindow::on_pb_saveAs_clicked()
 void MainWindow::on_pb_update_clicked()
 {
     //paint->removeAll();
+    if(ui->cb_setZ->isChecked()){
+        paint->init(0.0, ui->sb_z->value());
+    }
     paint->update();
 }
 
@@ -217,6 +255,11 @@ void MainWindow::on_cb_choosePoint_stateChanged(int arg1)
 
 void MainWindow::on_cb_fill_stateChanged(int arg1)
 {
+    if(ui->cb_fill->isChecked())
+        ui->lbl_sampleColor->setVisible(true);
+    else
+        ui->lbl_sampleColor->setVisible(false);
+
     paint->setFill(ui->cb_fill->isChecked());
     paint->update();
 }
@@ -224,5 +267,23 @@ void MainWindow::on_cb_fill_stateChanged(int arg1)
 void MainWindow::on_cb_showGrid_stateChanged(int arg1)
 {
     paint->setShowGrid(ui->cb_showGrid->isChecked());
+    paint->update();
+}
+
+void MainWindow::on_cb_setZ_stateChanged(int arg1)
+{
+    if(ui->cb_setZ->isChecked()){
+        //paint->init(0, ui->sb_z->value());
+        ui->label_3->setEnabled(true);
+        ui->sb_z->setEnabled(true);
+    }else{
+        ui->label_3->setEnabled(false);
+        ui->sb_z->setEnabled(false);
+    }
+}
+
+void MainWindow::on_pb_default_clicked()
+{
+    paint->init();
     paint->update();
 }

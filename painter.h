@@ -23,10 +23,11 @@ class Painter
     QLabel* lable;
     QPointF A, B, C;
     QVector<QPointF> points;
+    QColor color = Qt::black;
     int n;
 
-    int pixmapHeight;
-    int pixmapWidht;
+    int pixmapHeight;// высота
+    int pixmapWidht;// ширина
     bool autoChooseN;
     bool choosePoint;
     bool showGrid;
@@ -35,10 +36,10 @@ class Painter
     double oX;
     double oY;
 
-    int xMin;
-    int xMax;
-    int yMin;
-    int yMax;
+    double xMin;
+    double xMax;
+    double yMin;
+    double yMax;
 
     int globalXmin = -100;
     int globalXmax = 100;
@@ -64,12 +65,16 @@ public:
     Painter(QLabel*);
 
     void init(int = -10, int = 10);
+    void init(double, double);
     void setX(int, int);
     void setY(int, int);
+    void setX(double, double);
+    void setY(double, double);
     void setSize();
     void setO();
     void setO(double, double);
     void setPen(QColor = Qt::black, int = 1);
+    void setColor(QColor);
     void calcScale();
     void setAutoChooseN(bool, int = 0);
     void setChoosePoint(bool);

@@ -5,8 +5,10 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QPair>
+#include <QColorDialog>
 
 #include "painter.h"
+#include "triangle.h"
 
 namespace Ui {
 class MainWindow;
@@ -37,6 +39,7 @@ signals:
     void signalMouseMove(QPoint);
     void signalWhell(int);
     void signalAddPoins(QPoint);
+    void signalColor();
 
 private:
     Ui::MainWindow *ui;
@@ -44,7 +47,7 @@ private:
 protected:
     void mousePressEvent(QMouseEvent*);
     void mouseReleaseEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);// TODO придумать нормальное смещение для графика
     void wheelEvent(QWheelEvent*);
 
 private slots:
@@ -53,6 +56,7 @@ private slots:
     void slotMouseMove(QPoint);
     void slotWhell(int);
     void slotAddPoints(QPoint);
+    void slotColor();
     void on_cb_nAuto_stateChanged(int arg1);
     void on_sb_n_valueChanged(int arg1);
     void on_pb_clear_clicked();
@@ -61,6 +65,8 @@ private slots:
     void on_cb_choosePoint_stateChanged(int arg1);
     void on_cb_fill_stateChanged(int arg1);
     void on_cb_showGrid_stateChanged(int arg1);
+    void on_cb_setZ_stateChanged(int arg1);
+    void on_pb_default_clicked();
 };
 
 #endif // MAINWINDOW_H

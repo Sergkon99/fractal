@@ -17,6 +17,7 @@ Painter::Painter(QLabel* l){
 
     init(0, 1);
 
+    //QPointF f(3.4, 5.6);
     A = QPointF(2, 3);
     B = QPointF(-6, 8);
     C = QPointF(-1, -4);
@@ -39,6 +40,18 @@ void Painter::setY(int min, int max){
     yMax = max;
 }
 
+void Painter::setX(double min, double max)
+{
+    xMin = min;
+    xMax = max;
+}
+
+void Painter::setY(double min, double max)
+{
+    yMin = min;
+    yMax = max;
+}
+
 void Painter::setO(double x, double y){
     oX = x;
     oY = y;
@@ -49,13 +62,25 @@ void Painter::setPen(QColor c, int n)
     painter->setPen(QPen(c, n));
 }
 
+void Painter::setColor(QColor c)
+{
+    color = c;
+}
+
 void Painter::setO(){
     oX = fabs(xMin);
     oY = yMax;
 }
 
 void Painter::init(int a, int b){
+    setX(a, b);
+    setY(a, b);
+    setO();
+    calcScale();
+}
 
+void Painter::init(double a, double b)
+{
     setX(a, b);
     setY(a, b);
     setO();
@@ -197,17 +222,24 @@ void Painter::drawAxes(){
     painter->drawLine(l1);
     painter->drawLine(l2);
 
+    painter->setPen(QPen(Qt::black,3));
     for(int i = globalXmin; i <= globalXmax; i++){
         painter->drawPoint((oX + i) * scaleX, oY * scaleY);
 
-        painter->drawText((oX + i) * scaleX, oY * scaleY, QString::number(i));
+        if(i == 0){
+            painter->drawText((oX + i) * scaleX + 5, oY * scaleY - 5, QString::number(i));
+            continue;
+        }
+        painter->drawText((oX + i) * scaleX - 3, oY * scaleY - 5, QString::number(i));
     }
 
     for(int i = globalYmin; i <= globalYmax; i++){
         painter->drawPoint(oX * scaleX, (oY + i) * scaleY);
 
-        painter->drawText(oX * scaleX, (oY + i) * scaleY, QString::number(-i));
+        if(i == 0)continue;
+        painter->drawText(oX * scaleX + 5, (oY + i) * scaleY + 5, QString::number(-i));
     }
+    painter->setPen(QPen(Qt::black,1));
 }
 
 void Painter::drawGrid(){
@@ -237,6 +269,7 @@ bool Painter::inArea(QPoint a, QPoint b, QPoint c)
 
 QColor Painter::randomColor()
 {
+    //QRandomGenerator gen;
     std::srand(QTime::currentTime().msec());
     std::rand() % 256;
 
@@ -253,6 +286,7 @@ double Painter::dist(QPoint p1, QPoint p2)
 }
 
 void Painter::draw(){
+    // рисуем график
     QPainterPath path;
     bool st = true;
     for (double i = -10; i <= 10; i += 0.01) {
@@ -269,6 +303,7 @@ void Painter::draw(){
     }
     QPolygon p(v);
     painter->drawPolygon(p);
+    //painter->drawPath(path);
 }
 
 void Painter::draw(const QPolygon &p)
@@ -288,23 +323,27 @@ void Painter::drawFractal(QPointF _v1, QPointF _v2, QPointF _v3, int n)
         polygon.append(v2);
         polygon.append(v3);
         if(fill)
-            painter->setBrush(Qt::black); 
+            painter->setBrush(color); // заливка треугольников
         else
             painter->setBrush(Qt::NoBrush);
 
         draw(polygon);
-
+        //
+        //qDebug() << randomColor();
         return;
     }
 
+    //qDebug() << dist(v1, v2) << " " << dist(v2, v3) << " " << dist(v3, v1);
     QPointF s12((_v1.x() + _v2.x()) / 2, (_v1.y() + _v2.y()) / 2);
     QPointF s23((_v2.x() + _v3.x()) / 2, (_v2.y() + _v3.y()) / 2);
     QPointF s31((_v3.x() + _v1.x()) / 2, (_v3.y() + _v1.y()) / 2);
 
-
-    drawFractal(_v1, s12, s31, n - 1);
-    drawFractal(s12, _v2, s23, n - 1);
-    drawFractal(s23, _v3, s31, n - 1);
+    //if(inArea(v1, s12, s31))
+        drawFractal(_v1, s12, s31, n - 1);
+    //if(inArea(s12, v2, s23))
+        drawFractal(s12, _v2, s23, n - 1);
+    //if(inArea(s23, v3, s31))
+        drawFractal(s23, _v3, s31, n - 1);
 }
 
 void Painter::drawPoint(QPointF p)
