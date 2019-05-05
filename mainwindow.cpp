@@ -53,7 +53,6 @@ void MainWindow::mousePressEvent(QMouseEvent * e)
     auto graphGeometry = ui->lbGraph->geometry();
 
     if(checkArea(cursorPos, graphGeometry)){
-        //cursorPos = QPoint(cursorPos.x() - graphGeometry.x(), cursorPos.y() - graphGeometry.y()); // преобразование координат курсора относительно pixmap
         emit signalMousePress(cursorPos);
         if(ui->cb_choosePoint->isChecked()){
             emit signalAddPoins(cursorPos);
@@ -66,8 +65,6 @@ void MainWindow::mousePressEvent(QMouseEvent * e)
     if(checkArea(cursorPos, sampleColorGeonetry)){
         emit signalColor();
     }
-
-    //ui->statusBar->showMessage(QString("%1, %2").arg(cursorPos.x()).arg(cursorPos.y()));
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent * e)
@@ -179,8 +176,6 @@ void MainWindow::slotAddPoints(QPoint p)
         ui->cb_choosePoint->setChecked(false);
         ui->label_2->setEnabled(false);
     }
-
-    //paint->update();
     ui->statusBar->showMessage(QString("%1, %2 : %3, %4").arg(p.x()).arg(p.y()).arg(_p.x()).arg(_p.y()));
 }
 
@@ -234,7 +229,6 @@ void MainWindow::on_pb_saveAs_clicked()
 
 void MainWindow::on_pb_update_clicked()
 {
-    //paint->removeAll();
     if(ui->cb_setZ->isChecked()){
         paint->init(0.0, ui->sb_z->value());
     }
