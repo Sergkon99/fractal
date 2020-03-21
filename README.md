@@ -2,7 +2,7 @@
 
 Один из двумерных аналогов множества Кантора, предложенный польским математиком Вацлавом Серпинским в 1915 году.
 
-![Визуализация Diamond-Square](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/SierpinskiTriangle.PNG/1024px-SierpinskiTriangle.png "Орк")
+![Визуализация Diamond-Square](https://raw.githubusercontent.com/Sergkon99/fractal/master/img/ts.png "Орк")
 
 # Построение итеративным методом
 
@@ -28,4 +28,12 @@
 
 # Примеры работы
 
-![Пример 1](https://raw.githubusercontent.com/Sergkon99/diamond_square/master/img/3.png "Орк")
+![Пример 1](https://raw.githubusercontent.com/Sergkon99/fractal/master/img/7.png "Орк")
+
+![Пример 2](https://raw.githubusercontent.com/Sergkon99/fractal/master/img/8.png "Орк")
+
+![Пример 3](https://raw.githubusercontent.com/Sergkon99/fractal/master/img/12.png "Орк")
+
+![Пример 4](https://raw.githubusercontent.com/Sergkon99/fractal/master/img/13.png "Орк")
+
+![Пример 5](https://raw.githubusercontent.com/Sergkon99/fractal/master/img/14.png "Орк")
